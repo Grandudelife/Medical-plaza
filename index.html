@@ -4,106 +4,125 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>محتشمی مدپلازا</title>
-    
     <style>
-        /* تنظیمات پایه */
+        * { box-sizing: border-box; }
+        
         body, html {
             margin: 0;
             padding: 0;
-            background-color: #050505; /* پس‌زمینه تیره برای جذابیت سینمایی */
-            overflow-x: hidden;
-            font-family: sans-serif;
+            background-color: #050505;
+            font-family: Tahoma, sans-serif;
+            /* حذف overflow از body تا مکانیزم انیمیشن‌ها مختل نشود */
         }
 
-        /* --- افکت هنرمندانه اسلایدهای عمودی (سر خوردن روی هم) --- */
-        /* با این ترفند، هر اسلاید سر جای خودش می‌ایستد و اسلاید بعدی مثل یک کارت روی آن کشیده می‌شود */
-        .vertical-section {
+        /* یک کانتینر کلی برای جلوگیری از اسکرول افقی مزاحم مرورگر */
+        .main-wrapper {
+            overflow-x: hidden;
+        }
+
+        /* --- افکت هنرمندانه: سر خوردن تصاویر عمودی روی هم --- */
+        .sticky-panel {
+            position: sticky;
+            top: 0;
             height: 100vh;
             width: 100vw;
-            position: sticky; /* کلید اصلی افکت سر خوردن */
-            top: 0;
-            overflow: hidden;
-            box-shadow: 0 -15px 40px rgba(0,0,0,0.8); /* سایه نرم برای ایجاد عمق بین اسلایدها */
-            z-index: 1;
         }
 
-        .vertical-section img, .horizontal-panel img {
+        /* یک سایه بسیار نرم در بالای هر اسلاید برای ایجاد عمق سه‌بعدی هنگام روی هم قرار گرفتن */
+        .sticky-panel::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 15px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.6), transparent);
+            z-index: 10;
+        }
+
+        img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* تغییر به cover اگر می‌خواهی هیچ حاشیه سیاهی دور عکس‌ها نباشد */
+            object-fit: contain; /* نمایش کامل عکس بدون برش */
             background-color: #050505;
+            display: block;
         }
 
-        /* --- تنظیمات بخش اسکرول افقی --- */
+        /* --- تونل اسکرول افقی --- */
         .horizontal-container {
-            width: 100vw;
             height: 100vh;
+            width: 100vw;
             position: relative;
-            z-index: 10; /* قرار گرفتن روی اسلایدهای قبلی */
-            background-color: #050505;
+            background: #050505;
         }
 
         .horizontal-wrapper {
-            display: flex;
-            width: 600vw; /* 6 اسلاید داریم، پس عرض 6 برابر صفحه است */
             height: 100vh;
-            direction: ltr; /* این خط تداخل راست‌چین بودن سایت با GSAP را حل می‌کند */
+            display: flex;
+            flex-wrap: nowrap;
+            width: max-content; /* عرض داینامیک: به اندازه مجموع طول عکس‌ها باز می‌شود */
+            direction: ltr; /* حیاتی برای جلوگیری از باگ اسکرول در سایت‌های فارسی */
         }
 
         .horizontal-panel {
-            flex: 0 0 100vw; /* این خط جلوگیری می‌کند از مچاله و غیب شدن عکس‌ها! */
+            width: 100vw;
             height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            flex-shrink: 0; /* جلوگیری از مچاله شدن عکس‌ها */
         }
     </style>
 </head>
 <body>
+    <div class="main-wrapper">
+        
+        <div class="sticky-panel" style="z-index: 1;"><img src="1.png" alt="Slide 1"></div>
+        <div class="sticky-panel" style="z-index: 2;"><img src="2.png" alt="Slide 2"></div>
+        <div class="sticky-panel" style="z-index: 3;"><img src="3.png" alt="Slide 3"></div>
 
-    <section class="vertical-section"><img src="1.png" alt="Slide 1"></section>
-    <section class="vertical-section"><img src="2.png" alt="Slide 2"></section>
-    <section class="vertical-section"><img src="3.png" alt="Slide 3"></section>
-
-    <div class="horizontal-container">
-        <div class="horizontal-wrapper">
-            <section class="horizontal-panel"><img src="4.png" alt="Slide 4"></section>
-            <section class="horizontal-panel"><img src="5.png" alt="Slide 5"></section>
-            <section class="horizontal-panel"><img src="6.png" alt="Slide 6"></section>
-            <section class="horizontal-panel"><img src="7.png" alt="Slide 7"></section>
-            <section class="horizontal-panel"><img src="8.png" alt="Slide 8"></section>
-            <section class="horizontal-panel"><img src="9.png" alt="Slide 9"></section>
+        <div class="horizontal-container" style="z-index: 4;">
+            <div class="horizontal-wrapper">
+                <div class="horizontal-panel"><img src="4.png" alt="Slide 4"></div>
+                <div class="horizontal-panel"><img src="5.png" alt="Slide 5"></div>
+                <div class="horizontal-panel"><img src="6.png" alt="Slide 6"></div>
+                <div class="horizontal-panel"><img src="7.png" alt="Slide 7"></div>
+                <div class="horizontal-panel"><img src="8.png" alt="Slide 8"></div>
+                <div class="horizontal-panel"><img src="9.png" alt="Slide 9"></div>
+            </div>
         </div>
-    </div>
 
-    <section class="vertical-section" style="z-index: 20;"><img src="10.png" alt="Slide 10"></section>
-    <section class="vertical-section" style="z-index: 21;"><img src="11.png" alt="Slide 11"></section>
-    <section class="vertical-section" style="z-index: 22;"><img src="12.png" alt="Slide 12"></section>
+        <div class="sticky-panel" style="z-index: 5;"><img src="10.png" alt="Slide 10"></div>
+        <div class="sticky-panel" style="z-index: 6;"><img src="11.png" alt="Slide 11"></div>
+        <div class="sticky-panel" style="z-index: 7;"><img src="12.png" alt="Slide 12"></div>
+        
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     
     <script>
-        // اطمینان از لود شدن کامل صفحه قبل از اجرای انیمیشن
-        document.addEventListener("DOMContentLoaded", (event) => {
+        document.addEventListener("DOMContentLoaded", () => {
             gsap.registerPlugin(ScrollTrigger);
 
-            let wrapper = document.querySelector(".horizontal-wrapper");
-            let panels = gsap.utils.toArray(".horizontal-panel");
+            const wrapper = document.querySelector(".horizontal-wrapper");
+            
+            // محاسبه دقیق مسیری که کانتینر افقی باید طی کند
+            function getScrollAmount() {
+                return wrapper.scrollWidth - window.innerWidth;
+            }
 
-            // انیمیشن حرکت افقی نرم
-            gsap.to(panels, {
-                xPercent: -100 * (panels.length - 1),
-                ease: "none",
-                scrollTrigger: {
-                    trigger: ".horizontal-container",
-                    pin: true,        // میخکوب کردن صفحه موقع اسکرول افقی
-                    scrub: 1,         // عدد 1 باعث میشه انیمیشن با تاخیر نرم و بسیار جذابی موس رو دنبال کنه
-                    end: () => "+=" + (wrapper.offsetWidth - window.innerWidth) // محاسبه دقیق طول اسکرول
-                }
+            // انیمیشن حرکت به سمت چپ
+            const tween = gsap.to(wrapper, {
+                x: () => -getScrollAmount(), 
+                ease: "none"
+            });
+
+            // گره زدن انیمیشن به اسکرول موس
+            ScrollTrigger.create({
+                trigger: ".horizontal-container",
+                start: "top top",
+                end: () => `+=${getScrollAmount()}`,
+                pin: true,
+                animation: tween,
+                scrub: 1, // عدد 1 باعث می‌شود انیمیشن با یک تاخیر نرم و سینمایی موس را دنبال کند
+                invalidateOnRefresh: true 
             });
         });
     </script>
-
 </body>
 </html>

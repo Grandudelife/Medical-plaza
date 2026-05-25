@@ -2,8 +2,62 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>محتشمی مدپلازا</title>
-    <link rel="stylesheet" href="YOUR-CSS-FILE.css">
+    
+    <style>
+        /* تنظیمات پایه */
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: #050505; /* پس‌زمینه تیره برای جذابیت سینمایی */
+            overflow-x: hidden;
+            font-family: sans-serif;
+        }
+
+        /* --- افکت هنرمندانه اسلایدهای عمودی (سر خوردن روی هم) --- */
+        /* با این ترفند، هر اسلاید سر جای خودش می‌ایستد و اسلاید بعدی مثل یک کارت روی آن کشیده می‌شود */
+        .vertical-section {
+            height: 100vh;
+            width: 100vw;
+            position: sticky; /* کلید اصلی افکت سر خوردن */
+            top: 0;
+            overflow: hidden;
+            box-shadow: 0 -15px 40px rgba(0,0,0,0.8); /* سایه نرم برای ایجاد عمق بین اسلایدها */
+            z-index: 1;
+        }
+
+        .vertical-section img, .horizontal-panel img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain; /* تغییر به cover اگر می‌خواهی هیچ حاشیه سیاهی دور عکس‌ها نباشد */
+            background-color: #050505;
+        }
+
+        /* --- تنظیمات بخش اسکرول افقی --- */
+        .horizontal-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+            z-index: 10; /* قرار گرفتن روی اسلایدهای قبلی */
+            background-color: #050505;
+        }
+
+        .horizontal-wrapper {
+            display: flex;
+            width: 600vw; /* 6 اسلاید داریم، پس عرض 6 برابر صفحه است */
+            height: 100vh;
+            direction: ltr; /* این خط تداخل راست‌چین بودن سایت با GSAP را حل می‌کند */
+        }
+
+        .horizontal-panel {
+            flex: 0 0 100vw; /* این خط جلوگیری می‌کند از مچاله و غیب شدن عکس‌ها! */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
 </head>
 <body>
 
@@ -22,13 +76,34 @@
         </div>
     </div>
 
-    <section class="vertical-section"><img src="10.png" alt="Slide 10"></section>
-    <section class="vertical-section"><img src="11.png" alt="Slide 11"></section>
-    <section class="vertical-section"><img src="12.png" alt="Slide 12"></section>
+    <section class="vertical-section" style="z-index: 20;"><img src="10.png" alt="Slide 10"></section>
+    <section class="vertical-section" style="z-index: 21;"><img src="11.png" alt="Slide 11"></section>
+    <section class="vertical-section" style="z-index: 22;"><img src="12.png" alt="Slide 12"></section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
     
-    <script src="YOUR-JS-FILE.js"></script>
+    <script>
+        // اطمینان از لود شدن کامل صفحه قبل از اجرای انیمیشن
+        document.addEventListener("DOMContentLoaded", (event) => {
+            gsap.registerPlugin(ScrollTrigger);
+
+            let wrapper = document.querySelector(".horizontal-wrapper");
+            let panels = gsap.utils.toArray(".horizontal-panel");
+
+            // انیمیشن حرکت افقی نرم
+            gsap.to(panels, {
+                xPercent: -100 * (panels.length - 1),
+                ease: "none",
+                scrollTrigger: {
+                    trigger: ".horizontal-container",
+                    pin: true,        // میخکوب کردن صفحه موقع اسکرول افقی
+                    scrub: 1,         // عدد 1 باعث میشه انیمیشن با تاخیر نرم و بسیار جذابی موس رو دنبال کنه
+                    end: () => "+=" + (wrapper.offsetWidth - window.innerWidth) // محاسبه دقیق طول اسکرول
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>
